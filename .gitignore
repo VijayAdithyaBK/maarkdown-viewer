@@ -7,10 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and builds
 node_modules
 dist
 dist-ssr
+.vite/
+
+# Local overrides and environment files
 *.local
+.env*
+vite-env.d.ts
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +28,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Lock files (optional)
+bun.lockb
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
