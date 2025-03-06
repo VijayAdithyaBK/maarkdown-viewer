@@ -4,7 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // Detect if the environment is production
-const isProduction = process.env.NODE_ENV === 'production';
+// const isProduction = process.env.NODE_ENV === 'production';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -22,5 +22,6 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: isProduction ? '/maarkdown-viewer/' : '/', // Only use base for GitHub Pages
+  base: '/maarkdown-viewer/',
+  //base: isProduction ? '/maarkdown-viewer/' : '/', // Only use base for GitHub Pages
 }));
