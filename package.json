@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "clean": "rmdir /s /q dist && rmdir /s /q node_modules && npm cache clean --force",
     "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
