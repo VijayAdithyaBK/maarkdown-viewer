@@ -1,0 +1,217 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:wght@300;400;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  
+  /* Important: These styles will now be controlled by font size and weight settings */
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3,
+  .markdown-body h4,
+  .markdown-body h5,
+  .markdown-body h6 {
+    /* Remove fixed font-weight to allow it to be controlled by the ThemeProvider */
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+  }
+  
+  .markdown-body h1 {
+    font-size: 2.5em;
+  }
+  
+  .markdown-body h2 {
+    font-size: 2em;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.5em;
+  }
+  
+  .markdown-body h4 {
+    font-size: 1.25em;
+  }
+  
+  .markdown-body h5, .markdown-body h6 {
+    font-size: 1em;
+  }
+  
+  .markdown-body p {
+    @apply my-3;
+  }
+  
+  .markdown-body ul, .markdown-body ol {
+    @apply my-3 ml-6;
+  }
+  
+  .markdown-body ul {
+    @apply list-disc;
+  }
+  
+  .markdown-body ol {
+    @apply list-decimal;
+  }
+  
+  .markdown-body li {
+    @apply my-1;
+  }
+  
+  .markdown-body blockquote {
+    @apply pl-4 border-l-4 border-gray-200 my-4 italic;
+  }
+  
+  /* Improve dark mode visibility for code blocks */
+  .markdown-body pre {
+    @apply p-4 my-4 rounded-md overflow-x-auto;
+    background-color: #1e293b; /* slate-800 - darker for better contrast */
+    color: #e2e8f0; /* slate-200 - lighter text for dark background */
+  }
+  
+  /* Improve dark mode visibility for inline code */
+  .markdown-body code {
+    @apply font-mono text-sm px-1 py-0.5 rounded;
+    background-color: rgba(226, 232, 240, 0.1); /* Light background with transparency */
+    color: inherit; /* Will inherit from parent text color */
+  }
+  
+  /* Ensure code inside pre doesn't get double-styled */
+  .markdown-body pre code {
+    @apply bg-transparent p-0;
+    color: inherit;
+  }
+  
+  .markdown-body a {
+    @apply text-blue-600 hover:underline;
+  }
+  
+  /* Dark mode button and link modifications */
+  .dark .markdown-body a {
+    @apply text-blue-400;
+  }
+  
+  .markdown-body hr {
+    @apply my-6 border-gray-200;
+  }
+  
+  .markdown-body table {
+    @apply w-full my-4 border-collapse;
+  }
+  
+  .markdown-body th, .markdown-body td {
+    @apply border border-gray-300 px-3 py-2;
+  }
+  
+  .markdown-body th {
+    @apply bg-gray-100;
+  }
+  
+  /* Dark mode table styling */
+  .dark .markdown-body th {
+    @apply bg-gray-800 text-gray-100;
+  }
+  
+  .dark .markdown-body td,
+  .dark .markdown-body th {
+    @apply border-gray-700;
+  }
+}
+
+.glass-effect {
+  @apply backdrop-blur-sm bg-white/80 border border-white/20 shadow-sm;
+}
+
+/* Dark mode glass effect */
+.dark .glass-effect {
+  @apply backdrop-blur-sm bg-black/80 border border-gray-800 shadow-md;
+}
+
+.control-panel {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.control-panel-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.control-panel-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.control-panel-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.control-panel-exit-active {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Blue light filter classes */
+.blue-light-filter-low {
+  filter: sepia(20%) brightness(105%) saturate(85%);
+}
+
+.blue-light-filter-medium {
+  filter: sepia(40%) brightness(105%) saturate(70%);
+}
+
+.blue-light-filter-high {
+  filter: sepia(60%) brightness(105%) saturate(60%);
+}
