@@ -1,5 +1,5 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "maarkdown-viewer",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -51,6 +51,7 @@
     "input-otp": "^1.2.4",
     "jspdf": "^3.0.0",
     "lucide-react": "^0.462.0",
+    "mammoth": "^1.9.0",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",

@@ -44,8 +44,7 @@ export const useTheme = () => {
   return context;
 };
 
-// Updated color map to use black instead of blue for dark mode
-// Improved contrast for dark mode to ensure button and code block visibility
+// Updated color map to use proper button contrast in dark mode
 export const backgroundColorMap = {
   "white": "bg-white text-gray-800",
   "dark": "bg-gray-900 text-gray-100 dark", // Added 'dark' class for better targeting
@@ -107,8 +106,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           // Update buttons and code blocks styling based on theme
           if (color === 'dark') {
             document.documentElement.classList.add('dark');
+            
+            // Set CSS variables for dark mode button colors
+            document.documentElement.style.setProperty('--button-bg', '#374151'); // gray-700
+            document.documentElement.style.setProperty('--button-text', '#f3f4f6'); // gray-100
+            document.documentElement.style.setProperty('--button-hover', '#4b5563'); // gray-600
+            document.documentElement.style.setProperty('--button-border', '#6b7280'); // gray-500
           } else {
             document.documentElement.classList.remove('dark');
+            
+            // Reset CSS variables for light mode button colors
+            document.documentElement.style.removeProperty('--button-bg');
+            document.documentElement.style.removeProperty('--button-text');
+            document.documentElement.style.removeProperty('--button-hover');
+            document.documentElement.style.removeProperty('--button-border');
           }
         }
       } catch (error) {

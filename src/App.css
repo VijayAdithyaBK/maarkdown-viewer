@@ -1,8 +1,8 @@
 
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
@@ -64,4 +64,151 @@ input[type=number]::-webkit-outer-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* Dark mode button styling */
+.dark button[class*="outline"] {
+  background-color: var(--button-bg, #374151) !important;
+  color: var(--button-text, #f3f4f6) !important;
+  border-color: var(--button-border, #6b7280) !important;
+}
+
+.dark button[class*="outline"]:hover {
+  background-color: var(--button-hover, #4b5563) !important;
+}
+
+.dark button[class*="ghost"] {
+  color: var(--button-text, #f3f4f6) !important;
+}
+
+.dark button[class*="ghost"]:hover {
+  background-color: var(--button-hover, #4b5563) !important;
+}
+
+/* Dark mode dropdown styling */
+.dark [data-radix-popper-content-wrapper] {
+  background-color: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+}
+
+.dark [role="menuitem"] {
+  color: #f3f4f6 !important;
+}
+
+.dark [role="menuitem"]:hover {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
+
+/* Fix for dark mode text in popover content */
+.dark .popover-content,
+.dark .PopoverContent {
+  color: #f3f4f6 !important;
+}
+
+/* Fix for dark mode labels and text */
+.dark label,
+.dark .text-xs,
+.dark .text-base,
+.dark .text-sm,
+.dark input,
+.dark .font-style-option,
+.dark [class*="glass-effect"] {
+  color: #f3f4f6 !important;
+}
+
+.dark input {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 640px) {
+  .markdown-body h1 {
+    font-size: 1.8em;
+  }
+  
+  .markdown-body h2 {
+    font-size: 1.5em;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.2em;
+  }
+  
+  .markdown-body pre {
+    padding: 0.75rem;
+  }
+}
+
+/* Fullscreen styles */
+:fullscreen .markdown-body {
+  max-width: 100% !important;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+:fullscreen {
+  background-color: var(--background);
+  padding: 1rem;
+  overflow-y: auto;
+  width: 100vw !important;
+}
+
+/* Adjust fullscreen content to fit device width */
+@media (max-width: 768px) {
+  :fullscreen .markdown-body {
+    max-width: 100% !important;
+    padding: 0 0.5rem;
+  }
+  
+  :fullscreen {
+    padding: 0.5rem;
+  }
+}
+
+/* Clickable font style options */
+.font-style-option {
+  display: flex;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.font-style-option:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .font-style-option:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.font-style-option.selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .font-style-option.selected {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hide scrollbars globally */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Ensure the ScrollArea component still works */
+.scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 9999px;
+}
+
+.dark .scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
 }
