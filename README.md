@@ -1,53 +1,113 @@
-# Welcome to your the Markdown Viewer project
+<div align="center">
 
-Live at https://vijayadithyabk.github.io/maarkdown-viewer/
+# ✨ Maarkdown Viewer
 
-## How can I edit this code?
+**A beautiful, modern markdown editor and viewer built for distraction-free writing.**
 
-There are several ways of editing your application.
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](https://vijayadithyabk.github.io/maarkdown-viewer/)
+[![Built with React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 
-**Use your preferred IDE**
+[Live Demo](https://vijayadithyabk.github.io/maarkdown-viewer/) • [Report Bug](../../issues) • [Request Feature](../../issues)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes.
+</div>
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🎯 What is this?
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Maarkdown Viewer is a sleek, browser-based markdown editor that lets you write, preview, and export your documents with style. No installations, no sign-ups – just open and start writing!
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🆕 What's New in V2
 
-# Step 3: Install the necessary dependencies.
-npm i
+> **11 files changed, 1195 additions, 784 deletions**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- **🎨 Redesigned Settings Panel** — MS Word-style controls with dropdowns
+- **🎯 Preview-Only Themes** — Theme changes now only affect the preview pane
+- **🖥️ Fullscreen Improvements** — Settings accessible in fullscreen mode
+- **🏠 New Homepage** — Modern landing page with feature cards
+- **📄 PDF Conversion** — Enhanced document conversion workflow
+- **🧹 Cleaner Codebase** — Removed blue light filter, simplified theme logic
+
+## ✨ Features
+
+- **📝 Live Editor** — Write markdown with instant preview
+- **🔀 Split View** — See your markdown and preview side-by-side  
+- **🎨 Reading Themes** — White, Dark, and Cream backgrounds for comfortable reading
+- **📖 Typography Controls** — Customize font style, size, weight, line height, and spacing
+- **📤 Export Options** — Download as TXT, DOC, or PDF
+- **📁 File Upload** — Import existing `.md` files
+- **🖥️ Fullscreen Mode** — Distraction-free writing experience
+- **💾 Auto-Save** — Your preferences are saved locally
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/vijayadithyabk/maarkdown-viewer.git
+
+# Navigate to project
+cd maarkdown-viewer
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:8080](http://localhost:8080) and start writing! 🎉
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Tech Stack
 
-**Use GitHub Codespaces**
+| Technology         | Purpose            |
+| ------------------ | ------------------ |
+| **React 18**       | UI Framework       |
+| **TypeScript**     | Type Safety        |
+| **Vite**           | Build Tool         |
+| **Tailwind CSS**   | Styling            |
+| **shadcn/ui**      | Component Library  |
+| **react-markdown** | Markdown Rendering |
+| **jsPDF**          | PDF Export         |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📁 Project Structure
 
-## What technologies are used for this project?
+```
+src/
+├── components/
+│   ├── MarkdownViewer.tsx   # Main editor component
+│   ├── ControlPanel.tsx     # Reading preferences UI
+│   └── ThemeProvider.tsx    # Theme context
+├── pages/
+│   ├── Home.tsx             # Landing page
+│   └── Index.tsx            # Main app wrapper
+└── lib/
+    └── utils.ts             # Utility functions
+```
 
-This project is built with .
+## 🤝 Contributing
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Contributions are welcome! Feel free to:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+
+**⭐ If you find this project interesting, please consider giving it a star! ⭐**
+
+</div>
+
+<p align="center">
+  <i>⚡ Crafted by Vijay Adithya B K</i>
+</p>

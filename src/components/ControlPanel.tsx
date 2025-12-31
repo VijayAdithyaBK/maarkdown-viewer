@@ -1,309 +1,238 @@
 
 import React, { useState, useEffect } from "react";
-import { Settings, Minus, Plus } from "lucide-react";
+import { Settings, Check, RotateCcw, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
-import { useTheme, backgroundColorMap, fontFamilyMap } from "./ThemeProvider";
+import { useTheme, backgroundColorMap } from "./ThemeProvider";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export const ControlPanel: React.FC = () => {
-  const { 
-    fontSize, 
-    setFontSize, 
-    fontFamily, 
-    setFontFamily, 
-    backgroundColor, 
+// Options for all dropdowns
+const fontStyleOptions = [
+  { value: "sans", label: "Sans Serif" },
+  { value: "serif", label: "Serif" },
+  { value: "mono", label: "Monospace" },
+];
+
+const weightOptions = [
+  { value: "300", label: "Light" },
+  { value: "400", label: "Regular" },
+  { value: "500", label: "Medium" },
+  { value: "600", label: "Semibold" },
+  { value: "700", label: "Bold" },
+];
+
+const lineHeightOptions = [
+  { value: "1.2", label: "Compact" },
+  { value: "1.5", label: "Normal" },
+  { value: "1.8", label: "Relaxed" },
+  { value: "2.2", label: "Loose" },
+];
+
+const spacingOptions = [
+  { value: "-1", label: "Tight" },
+  { value: "0", label: "Normal" },
+  { value: "1", label: "Wide" },
+  { value: "3", label: "Extra Wide" },
+];
+
+export const ControlPanel: React.FC<{ portalContainer?: HTMLElement | null }> = ({ portalContainer }) => {
+  const {
+    fontSize,
+    setFontSize,
+    fontFamily,
+    setFontFamily,
+    backgroundColor,
     setBackgroundColor,
-    blueLightFilter,
-    setBlueLightFilter,
     fontWeight,
     setFontWeight,
     letterSpacing,
     setLetterSpacing,
     lineHeight,
-    setLineHeight
+    setLineHeight,
+    resetTheme
   } = useTheme();
-  
+
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  // Listen for fullscreen change to hide control panel
   useEffect(() => {
     const handleFullScreenChange = () => {
       setIsFullScreen(!!document.fullscreenElement);
     };
-
     document.addEventListener('fullscreenchange', handleFullScreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-    };
+    return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
   }, []);
 
-  // Hide control panel in fullscreen mode
-  if (isFullScreen) {
-    return null;
-  }
-
-  const handleFontSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value >= 12) {
-      setFontSize(value);
+  // Font size handlers
+  const incrementFontSize = () => setFontSize(Math.min(72, fontSize + 1));
+  const decrementFontSize = () => setFontSize(Math.max(8, fontSize - 1));
+  const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseInt(e.target.value);
+    if (!isNaN(val) && val >= 8 && val <= 72) {
+      setFontSize(val);
     }
   };
 
-  const increaseFontSize = () => {
-    setFontSize(fontSize + 1);
-  };
-
-  const decreaseFontSize = () => {
-    if (fontSize > 12) {
-      setFontSize(fontSize - 1);
-    }
-  };
-
-  const increaseFontWeight = () => {
-    const weights: number[] = [300, 400, 500, 600, 700];
-    const currentIndex = weights.indexOf(fontWeight);
-    if (currentIndex < weights.length - 1) {
-      setFontWeight(weights[currentIndex + 1] as 300 | 400 | 500 | 600 | 700);
-    }
-  };
-
-  const decreaseFontWeight = () => {
-    const weights: number[] = [300, 400, 500, 600, 700];
-    const currentIndex = weights.indexOf(fontWeight);
-    if (currentIndex > 0) {
-      setFontWeight(weights[currentIndex - 1] as 300 | 400 | 500 | 600 | 700);
-    }
-  };
-
-  const increaseLetterSpacing = () => {
-    setLetterSpacing(Math.min(10, letterSpacing + 0.5));
-  };
-
-  const decreaseLetterSpacing = () => {
-    setLetterSpacing(Math.max(-2, letterSpacing - 0.5));
-  };
-
-  const increaseLineHeight = () => {
-    setLineHeight(Math.min(3, lineHeight + 0.1));
-  };
-
-  const decreaseLineHeight = () => {
-    setLineHeight(Math.max(1, lineHeight - 0.1));
+  // Find closest option
+  const getClosestOption = (options: { value: string }[], currentValue: number): string => {
+    return options.reduce((prev, curr) =>
+      Math.abs(parseFloat(curr.value) - currentValue) < Math.abs(parseFloat(prev.value) - currentValue)
+        ? curr : prev
+    ).value;
   };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 rounded-full h-10 w-10 sm:h-12 sm:w-12 shadow-lg hover:shadow-xl transition-all duration-300 border-2 z-10"
-        >
-          <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
+        <Button variant="ghost" size="sm" className="h-8 w-8 px-0" title="Reading Settings">
+          <Settings className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 sm:w-72 p-3 animate-zoom-in glass-effect">
-        <ScrollArea className="h-[340px] pr-3">
-          <div className="space-y-3">
-            <h3 className="font-medium text-base mb-1">Reading Settings</h3>
-            
-            <Separator className="my-1" />
-            
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">Font Size</Label>
-                <div className="flex items-center gap-1">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={decreaseFontSize}
-                    disabled={fontSize <= 12}
-                    className="h-6 w-6"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  
-                  <Input 
-                    type="number" 
-                    value={fontSize} 
-                    onChange={handleFontSizeInputChange}
-                    min={12}
-                    className="w-12 h-6 text-center text-xs p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={increaseFontSize}
-                    className="h-6 w-6"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
+      <PopoverContent className="w-56 p-3" align="end" container={portalContainer}>
+        <div className="space-y-3">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-sm">Preferences</h4>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+              onClick={resetTheme}
+            >
+              <RotateCcw className="h-3 w-3 mr-1" />
+              Reset
+            </Button>
+          </div>
+
+          <Separator />
+
+          {/* Font Style - Inline */}
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Font</Label>
+            <Select value={fontFamily} onValueChange={(val) => setFontFamily(val as any)}>
+              <SelectTrigger className="h-7 w-28 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent container={portalContainer}>
+                {fontStyleOptions.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Font Size - Inline */}
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Size</Label>
+            <div className="flex items-center gap-0.5">
+              <Button variant="outline" size="icon" className="h-7 w-7" onClick={decrementFontSize} disabled={fontSize <= 8}>
+                <Minus className="h-3 w-3" />
+              </Button>
+              <Input
+                type="number"
+                value={fontSize}
+                onChange={handleFontSizeChange}
+                className="h-7 w-12 text-center text-xs px-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                min={8}
+                max={72}
+              />
+              <Button variant="outline" size="icon" className="h-7 w-7" onClick={incrementFontSize} disabled={fontSize >= 72}>
+                <Plus className="h-3 w-3" />
+              </Button>
             </div>
-            
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">Font Weight</Label>
-                <div className="flex items-center gap-1">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={decreaseFontWeight}
-                    disabled={fontWeight <= 300}
-                    className="h-6 w-6"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  
-                  <div className="w-12 h-6 text-center text-xs flex items-center justify-center">
-                    {fontWeight}
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={increaseFontWeight}
-                    disabled={fontWeight >= 700}
-                    className="h-6 w-6"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">Letter Spacing</Label>
-                <div className="flex items-center gap-1">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={decreaseLetterSpacing}
-                    disabled={letterSpacing <= -2}
-                    className="h-6 w-6"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  
-                  <div className="w-12 h-6 text-center text-xs flex items-center justify-center">
-                    {letterSpacing.toFixed(1)}
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={increaseLetterSpacing}
-                    disabled={letterSpacing >= 10}
-                    className="h-6 w-6"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">Line Height</Label>
-                <div className="flex items-center gap-1">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={decreaseLineHeight}
-                    disabled={lineHeight <= 1}
-                    className="h-6 w-6"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  
-                  <div className="w-12 h-6 text-center text-xs flex items-center justify-center">
-                    {lineHeight.toFixed(1)}
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={increaseLineHeight}
-                    disabled={lineHeight >= 3}
-                    className="h-6 w-6"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">Font Style</Label>
-              <div className="space-y-1">
-                <div 
-                  className={`font-style-option font-sans ${fontFamily === 'sans' ? 'selected' : ''}`}
-                  onClick={() => setFontFamily('sans')}
-                >
-                  <span className="text-xs">Sans Serif</span>
-                </div>
-                <div 
-                  className={`font-style-option font-serif ${fontFamily === 'serif' ? 'selected' : ''}`}
-                  onClick={() => setFontFamily('serif')}
-                >
-                  <span className="text-xs">Serif</span>
-                </div>
-                <div 
-                  className={`font-style-option font-mono ${fontFamily === 'mono' ? 'selected' : ''}`}
-                  onClick={() => setFontFamily('mono')}
-                >
-                  <span className="text-xs">Monospace</span>
-                </div>
-                <div 
-                  className={`font-style-option font-display ${fontFamily === 'display' ? 'selected' : ''}`}
-                  onClick={() => setFontFamily('display')}
-                >
-                  <span className="text-xs">Display</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-1">
-              <Label className="text-xs font-medium">Theme</Label>
-              <div className="grid grid-cols-3 gap-1">
-                {Object.entries(backgroundColorMap).map(([key, value]) => (
+          </div>
+
+          {/* Weight - Inline */}
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Weight</Label>
+            <Select value={String(fontWeight)} onValueChange={(val) => setFontWeight(Number(val) as any)}>
+              <SelectTrigger className="h-7 w-28 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent container={portalContainer}>
+                {weightOptions.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Separator />
+
+          {/* Line Height - Inline */}
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Line Height</Label>
+            <Select value={getClosestOption(lineHeightOptions, lineHeight)} onValueChange={(val) => setLineHeight(parseFloat(val))}>
+              <SelectTrigger className="h-7 w-28 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent container={portalContainer}>
+                {lineHeightOptions.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Letter Spacing - Inline */}
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Spacing</Label>
+            <Select value={getClosestOption(spacingOptions, letterSpacing)} onValueChange={(val) => setLetterSpacing(parseFloat(val))}>
+              <SelectTrigger className="h-7 w-28 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent container={portalContainer}>
+                {spacingOptions.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Separator />
+
+          {/* Theme - Inline */}
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Theme</Label>
+            <div className="flex gap-1.5">
+              {Object.entries(backgroundColorMap).map(([key, value]) => {
+                const bgClass = value.split(' ')[0];
+                const isSelected = backgroundColor === key;
+                return (
                   <button
                     key={key}
                     onClick={() => setBackgroundColor(key as any)}
-                    className={`w-full h-8 rounded-md ${value.split(' ')[0]} border transition-transform ${
-                      backgroundColor === key ? 'ring-1 ring-primary scale-105' : 'ring-0 hover:scale-105'
-                    }`}
-                    aria-label={`Set background color to ${key}`}
-                    title={key}
-                  />
-                ))}
-              </div>
-            </div>
-            
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">Blue Light Filter</Label>
-                <span className="text-xs">{Math.round(blueLightFilter * 100)}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={blueLightFilter}
-                onChange={(e) => setBlueLightFilter(parseFloat(e.target.value))}
-                className="w-full h-1.5"
-              />
+                    className={`
+                      h-6 w-6 rounded border flex items-center justify-center transition-all
+                      ${bgClass}
+                      ${isSelected ? 'ring-2 ring-primary ring-offset-1' : 'hover:ring-1 hover:ring-ring/50'}
+                    `}
+                    title={key.charAt(0).toUpperCase() + key.slice(1)}
+                  >
+                    {isSelected && <Check className={`h-3 w-3 ${key === 'dark' ? 'text-white' : 'text-black'}`} />}
+                  </button>
+                );
+              })}
             </div>
           </div>
-        </ScrollArea>
+
+        </div>
       </PopoverContent>
     </Popover>
   );

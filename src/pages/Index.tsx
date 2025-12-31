@@ -2,10 +2,6 @@
 import React from "react";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { MarkdownViewer } from "@/components/MarkdownViewer";
-import { ControlPanel } from "@/components/ControlPanel";
-import { Header } from "@/components/Header";
-import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -20,17 +16,9 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <ThemeProvider>
-        <Header />
-        <div className="px-4 py-2">
-          <Link to="/" className="flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Back to Home
-          </Link>
-        </div>
-        <main className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col pt-2">
           <MarkdownViewer />
-        </main>
-        <ControlPanel />
+        </div>
       </ThemeProvider>
     </div>
   );

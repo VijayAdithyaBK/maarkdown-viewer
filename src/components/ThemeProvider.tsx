@@ -9,26 +9,24 @@ interface ThemeContextProps {
   fontSize: number;
   fontFamily: FontFamily;
   backgroundColor: BackgroundColor;
-  blueLightFilter: number;
   fontWeight: FontWeight;
   letterSpacing: number;
   lineHeight: number;
   setFontSize: (size: number) => void;
   setFontFamily: (family: FontFamily) => void;
   setBackgroundColor: (color: BackgroundColor) => void;
-  setBlueLightFilter: (intensity: number) => void;
   setFontWeight: (weight: FontWeight) => void;
   setLetterSpacing: (spacing: number) => void;
   setLineHeight: (height: number) => void;
+  resetTheme: () => void;
 }
 
-const defaultTheme: Omit<ThemeContextProps, 
-  "setFontSize" | "setFontFamily" | "setBackgroundColor" | "setBlueLightFilter" | 
-  "setFontWeight" | "setLetterSpacing" | "setLineHeight"> = {
+const defaultTheme: Omit<ThemeContextProps,
+  "setFontSize" | "setFontFamily" | "setBackgroundColor" |
+  "setFontWeight" | "setLetterSpacing" | "setLineHeight" | "resetTheme"> = {
   fontSize: 16,
   fontFamily: "sans",
   backgroundColor: "white",
-  blueLightFilter: 0,
   fontWeight: 400,
   letterSpacing: 0,
   lineHeight: 1.5,
@@ -89,98 +87,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setBackgroundColor = (color: BackgroundColor) => {
     setTheme((prev: any) => ({ ...prev, backgroundColor: color }));
-    
-    // Apply theme to document body - with improved error handling
-    if (backgroundColorMap[color]) {
-      try {
-        // Reset all classes first
-        document.body.className = '';
-        
-        const bgClasses = backgroundColorMap[color].split(' ');
-        if (bgClasses && bgClasses.length > 0) {
-          // Apply each class individually
-          bgClasses.forEach(cls => {
-            if (cls) document.body.classList.add(cls);
-          });
-          
-          // Update buttons and code blocks styling based on theme
-          if (color === 'dark') {
-            document.documentElement.classList.add('dark');
-            
-            // Set CSS variables for dark mode button colors
-            document.documentElement.style.setProperty('--button-bg', '#374151'); // gray-700
-            document.documentElement.style.setProperty('--button-text', '#f3f4f6'); // gray-100
-            document.documentElement.style.setProperty('--button-hover', '#4b5563'); // gray-600
-            document.documentElement.style.setProperty('--button-border', '#6b7280'); // gray-500
-          } else {
-            document.documentElement.classList.remove('dark');
-            
-            // Reset CSS variables for light mode button colors
-            document.documentElement.style.removeProperty('--button-bg');
-            document.documentElement.style.removeProperty('--button-text');
-            document.documentElement.style.removeProperty('--button-hover');
-            document.documentElement.style.removeProperty('--button-border');
-          }
-        }
-      } catch (error) {
-        console.error("Error applying background color:", error);
-      }
-    }
+    // Theme is now applied only to preview pane via MarkdownViewer component
+    // No global document.body changes
   };
 
-  const setBlueLightFilter = (intensity: number) => {
-    setTheme((prev: any) => ({ ...prev, blueLightFilter: intensity }));
-    
-    // Apply blue light filter globally - improved implementation
-    try {
-      const filterValue = intensity > 0 
-        ? `sepia(${intensity * 0.4}) brightness(1.1) saturate(${1 - intensity * 0.5})` 
-        : 'none';
-        
-      document.documentElement.style.filter = filterValue;
-      
-      // Add class to body for easier targeting with CSS if needed
-      if (intensity > 0) {
-        const intensityClass = intensity < 0.3 
-          ? 'blue-light-filter-low' 
-          : intensity < 0.7 
-            ? 'blue-light-filter-medium' 
-            : 'blue-light-filter-high';
-            
-        document.body.classList.add(intensityClass);
-        
-        // Remove other filter classes
-        ['blue-light-filter-low', 'blue-light-filter-medium', 'blue-light-filter-high']
-          .filter(c => c !== intensityClass)
-          .forEach(c => document.body.classList.remove(c));
-      } else {
-        // Remove all filter classes
-        document.body.classList.remove(
-          'blue-light-filter-low', 
-          'blue-light-filter-medium', 
-          'blue-light-filter-high'
-        );
-      }
-    } catch (error) {
-      console.error("Error applying blue light filter:", error);
-    }
+  const resetTheme = () => {
+    setTheme(defaultTheme);
+    // Theme is applied only to preview pane - no global DOM cleanup needed
   };
+
+
 
   const setFontWeight = (weight: FontWeight) => {
     setTheme((prev: any) => ({ ...prev, fontWeight: weight }));
-    
-    // Apply font weight to the document to affect all headings
-    try {
-      document.documentElement.style.setProperty('--heading-font-weight', weight.toString());
-      
-      // Also update any existing elements directly
-      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      headings.forEach(heading => {
-        (heading as HTMLElement).style.fontWeight = weight.toString();
-      });
-    } catch (error) {
-      console.error("Error applying font weight to headings:", error);
-    }
+    // CSS variable for headings is handled better in the viewer component or via global CSS
+    document.documentElement.style.setProperty('--heading-font-weight', weight.toString());
   };
 
   const setLetterSpacing = (spacing: number) => {
@@ -191,37 +112,26 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme((prev: any) => ({ ...prev, lineHeight: height }));
   };
 
-  // Ensure all theme values have defaults to prevent undefined errors
   const themeValue = {
+    ...theme,
     fontSize: theme.fontSize ?? defaultTheme.fontSize,
     fontFamily: theme.fontFamily ?? defaultTheme.fontFamily,
     backgroundColor: theme.backgroundColor ?? defaultTheme.backgroundColor,
-    blueLightFilter: theme.blueLightFilter ?? defaultTheme.blueLightFilter,
     fontWeight: theme.fontWeight ?? defaultTheme.fontWeight,
     letterSpacing: theme.letterSpacing ?? defaultTheme.letterSpacing,
     lineHeight: theme.lineHeight ?? defaultTheme.lineHeight,
+
     setFontSize,
     setFontFamily,
     setBackgroundColor,
-    setBlueLightFilter,
     setFontWeight,
     setLetterSpacing,
     setLineHeight,
+    resetTheme,
   };
 
-  // Apply theme on initial load and when theme changes
-  useEffect(() => {
-    // Only call these functions with valid theme values
-    if (themeValue.backgroundColor) {
-      setBackgroundColor(themeValue.backgroundColor);
-    }
-    if (themeValue.blueLightFilter !== undefined) {
-      setBlueLightFilter(themeValue.blueLightFilter);
-    }
-    if (themeValue.fontWeight) {
-      setFontWeight(themeValue.fontWeight);
-    }
-  }, []);
+  // Theme values are consumed by MarkdownViewer for preview pane only
+  // No global DOM manipulation needed on initial load
 
   return (
     <ThemeContext.Provider value={themeValue}>
